@@ -8,3 +8,4 @@
 - ```WriteToCUDATextureAcrossKernels.cu```: writing to a CUDA texture across different kernel launches, see [Texture memory with READ and WRITE](http://stackoverflow.com/questions/12509346/texture-memory-with-read-and-write/32379274#32379274);
 - ```AddressingModesCUDATextures.cu```: the different types of addressing modes of a CUDA texture, see [The different addressing modes of CUDA textures](http://stackoverflow.com/questions/19020963/the-different-addressing-modes-of-cuda-textures);
 - ```Meshgrid.cu```: Emulating Matlab's meshgrid in CUDA, see [Replicate a vector multiple times using CUDA Thrust](http://stackoverflow.com/questions/16900837/replicate-a-vector-multiple-times-using-cuda-thrust/32451396#32451396);
+- ```ReverseArray.cu```: Reversing the order of the elements within an array, see [???](???);
