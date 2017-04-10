@@ -9,3 +9,14 @@
 - ```AddressingModesCUDATextures.cu```: the different types of addressing modes of a CUDA texture, see [The different addressing modes of CUDA textures](http://stackoverflow.com/questions/19020963/the-different-addressing-modes-of-cuda-textures);
 - ```Meshgrid.cu```: Emulating Matlab's meshgrid in CUDA, see [Replicate a vector multiple times using CUDA Thrust](http://stackoverflow.com/questions/16900837/replicate-a-vector-multiple-times-using-cuda-thrust/32451396#32451396);
 - ```ReverseArray.cu```: Reversing the order of the elements within an array, see [???](???);
+
+**A thing to care about when passing a struct to a CUDA kernel**
+
+Structures can be passed by values to CUDA kernels. However, some care should be devoted to set up a proper destructor since the destructor is called at exit from the kernel.
+Consider the example at ```passStructToKernel.cu``` with the uncommented destructor and do not pay too much attention on what the code actually does. If you run that code, you will receive the following output
+Calling destructor
+Counting in the locked case: 512
+Calling destructor
+GPUassert: invalid device pointer D:/Project/passStructToKernel/passClassToKernel/Utilities.cu 37
+As you can see, there are two calls to the destructor, once at the kernel exit and once at the main exit. The error message is related to the fact that, if the memory locations pointed to by d_state are freed at the kernel exit, they cannot be freed anymore at the main exit. Accordingly, the destructor must be different for host and device executions. This is accomplished by the commented destructor in the above code.
+
