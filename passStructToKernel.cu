@@ -21,6 +21,7 @@ struct Lock {
 
 	// --- Destructor (wrong version)
 	~Lock(void) { 
+		printf("Calling destructor\n");
 		gpuErrchk(cudaFree(d_state)); 
 	}
 
