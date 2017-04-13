@@ -38,19 +38,19 @@ struct Lock {
 /*************************************/
 /* BLOCK COUNTER KERNEL WITHOUT LOCK */
 /*************************************/
-__global__ void blockCounterUnlocked(int *nblocks) {
+__global__ void blockCountingKernelNoLock(int *numBlocks) {
 	
-	if (threadIdx.x == 0) {	*nblocks = *nblocks + 1; }
+	if (threadIdx.x == 0) {	numBlocks[0] = numBlocks[0] + 1; }
 }
 
 /**********************************/
 /* BLOCK COUNTER KERNEL WITH LOCK */
 /**********************************/
-__global__ void blockCounterLocked(Lock lock, int *nblocks) {
+__global__ void blockCountingKernelLock(Lock lock, int *numBlocks) {
 
 	if (threadIdx.x == 0) {
 		lock.lock();
-		*nblocks = *nblocks + 1;
+		numBlocks[0] = numBlocks[0] + 1;
 		lock.unlock();
 	}
 }
@@ -58,10 +58,10 @@ __global__ void blockCounterLocked(Lock lock, int *nblocks) {
 /****************************************/
 /* BLOCK COUNTER KERNEL WITH WRONG LOCK */
 /****************************************/
-__global__ void blockCounter2(Lock lock, int *nblocks) {
+__global__ void blockCountingKernelDeadlock(Lock lock, int *numBlocks) {
 	
 	lock.lock();
-	if (threadIdx.x == 0) { *nblocks = *nblocks + 1; }
+	if (threadIdx.x == 0) { numBlocks[0] = numBlocks[0] + 1; }
 	lock.unlock();
 }
 
@@ -79,7 +79,7 @@ int main(){
 	h_counting = 0;
 	gpuErrchk(cudaMemcpy(d_counting, &h_counting, sizeof(int), cudaMemcpyHostToDevice));
 
-	blockCounterUnlocked << <NUMBLOCKS, NUMTHREADS >> >(d_counting);
+	blockCountingKernelNoLock << <NUMBLOCKS, NUMTHREADS >> >(d_counting);
 	gpuErrchk(cudaPeekAtLastError());
 	gpuErrchk(cudaDeviceSynchronize());
 
@@ -90,7 +90,7 @@ int main(){
 	h_counting = 0;
 	gpuErrchk(cudaMemcpy(d_counting, &h_counting, sizeof(int), cudaMemcpyHostToDevice));
 
-	blockCounterLocked << <NUMBLOCKS, NUMTHREADS >> >(lock, d_counting);
+	blockCountingKernelLock << <NUMBLOCKS, NUMTHREADS >> >(lock, d_counting);
 	gpuErrchk(cudaPeekAtLastError());
 	gpuErrchk(cudaDeviceSynchronize());
 
