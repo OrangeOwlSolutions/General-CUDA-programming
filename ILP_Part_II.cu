@@ -91,7 +91,7 @@ __global__ void memcpy4_2(float2 *src, float2 *dst, unsigned int N)
 int main()
 {
 	//const int N = 131072;
-	const int N = 8192 * 4;
+	const int N = 8192 * 64;
 
 	const int N_iter = 20;
 
@@ -126,7 +126,7 @@ int main()
 	}
 	printf("GB/s = %f\n", (1.e-6)*((float)N*(float)N_iter*(float)sizeof(float)) / timerGPU.GetCounter());
 	gpuErrchk(cudaMemcpy(h_result, d_dest1, N*sizeof(int), cudaMemcpyDeviceToHost));
-	for (int i = 0; i<N; i++) if (h_result[i] != h_vect[i]) { printf("Error at i=%i! Host = %i; Device = %i\n", i, h_vect[i], h_result[i]); return 0; }
+	for (int i = 0; i<N; i++) if (h_result[i] != h_vect[i]) { printf("Error at i=%i! Host = %f; Device = %f\n", i, h_vect[i], h_result[i]); return 0; }
 
 	/***********/
 	/* MEMCPY2 */
@@ -141,7 +141,7 @@ int main()
 	}
 	printf("GB/s = %f\n", (1.e-6)*((float)N*(float)N_iter*(float)sizeof(float)) / timerGPU.GetCounter());
 	gpuErrchk(cudaMemcpy(h_result, d_dest2, N*sizeof(int), cudaMemcpyDeviceToHost));
-	for (int i = 0; i<N; i++) if (h_result[i] != h_vect[i]) { printf("Error at i=%i! Host = %i; Device = %i\n", i, h_vect[i], h_result[i]); return; }
+	for (int i = 0; i<N; i++) if (h_result[i] != h_vect[i]) { printf("Error at i=%i! Host = %f; Device = %f\n", i, h_vect[i], h_result[i]); return 0; }
 
 	/***********/
 	/* MEMCPY4 */
@@ -156,7 +156,7 @@ int main()
 	}
 	printf("GB/s = %f\n", (1.e-6)*(float)((float)N*(float)N_iter*(float)sizeof(float)) / timerGPU.GetCounter());
 	gpuErrchk(cudaMemcpy(h_result, d_dest4, N*sizeof(int), cudaMemcpyDeviceToHost));
-	for (int i = 0; i<N; i++) if (h_result[i] != h_vect[i]) { printf("Error at i=%i! Host = %i; Device = %i\n", i, h_vect[i], h_result[i]); return 0; }
+	for (int i = 0; i<N; i++) if (h_result[i] != h_vect[i]) { printf("Error at i=%i! Host = %f; Device = %f\n", i, h_vect[i], h_result[i]); return 0; }
 
 	/*************/
 	/* MEMCPY4_2 */
@@ -171,9 +171,7 @@ int main()
 	}
 	printf("GB/s = %f\n", (1.e-6)*(float)(N*N_iter*sizeof(float)) / timerGPU.GetCounter());
 	gpuErrchk(cudaMemcpy(h_result, d_dest4_2, N*sizeof(int), cudaMemcpyDeviceToHost));
-	for (int i = 0; i<N; i++) if (h_result[i] != h_vect[i]) { printf("Error at i=%i! Host = %i; Device = %i\n", i, h_vect[i], h_result[i]); return 0; }
-
-	cudaDeviceReset();
+	for (int i = 0; i<N; i++) if (h_result[i] != h_vect[i]) { printf("Error at i=%i! Host = %f; Device = %f\n", i, h_vect[i], h_result[i]); return 0; }
 
 	return 0;
 
