@@ -1,12 +1,15 @@
+// --- GT920m - 14.4 GB/s
+//     http://gpuboss.com/gpus/GeForce-GTX-280M-vs-GeForce-920M
+
 #include<stdio.h>
 #include<iostream>
 
 #include "Utilities.cuh"
 #include "TimingGPU.cuh"
 
-#define BLOCKSIZE	 512
+#define BLOCKSIZE	 32
 
-//#define DEBUG
+#define DEBUG
 
 /****************************************/
 /* INSTRUCTION LEVEL PARALLELISM KERNEL */
@@ -26,14 +29,15 @@ __global__ void ILPKernel(const int * __restrict__ d_a, int * __restrict__ d_b, 
 /********/
 int main() {
 
-	const int N = 2097152 * 64;
+	//const int N = 8192;
+	const int N = 524288 * 32;
 	//const int N = 1048576;
 	//const int N = 262144;
 	//const int N = 2048;
 
 	const int numITER = 100;
 
-	const int ILP = 1;
+	const int ILP = 16;
 
 	TimingGPU timerGPU;
 
@@ -65,7 +69,7 @@ int main() {
 		timeTotal = timeTotal + timerGPU.GetCounter();
 	}
 
-	printf("Bandwidth = %f GB / s; Num blocks = %d\n", (4.f * N * numITER) / (1e6 * timeTotal), iDivUp(N / ILP, BLOCKSIZE));
+	printf("Bandwidth = %f GB / s; Num blocks = %d\n", (2.f * 4.f * N * numITER) / (1e6 * timeTotal), iDivUp(N / ILP, BLOCKSIZE));
 	gpuErrchk(cudaMemcpy(h_b, d_b, N * sizeof(int), cudaMemcpyDeviceToHost));
 	for (int i = 0; i < N; i++) if (h_a[i] != h_b[i]) { printf("Error at i = %i for kernel0! Host = %i; Device = %i\n", i, h_a[i], h_b[i]); return 1; }
 
