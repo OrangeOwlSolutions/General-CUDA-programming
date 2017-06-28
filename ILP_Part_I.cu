@@ -104,7 +104,9 @@ __global__ void kernel2(float * __restrict__ d_a, const float * __restrict__ d_b
 /********/
 int main() {
 
-	const int N = 8192 * 64;
+	//const int N = 8192 * 64;
+	const int N = 8192;
+	//const int N = 1024;
 
 	TimingGPU timerGPU;
 
@@ -142,7 +144,7 @@ int main() {
 	gpuErrchk(cudaDeviceSynchronize());
 #endif
 	// --- Remember: timing is in ms
-	printf("GFlops = %f\n", (1.e-6)*((float)N*(float)N_ITERATIONS) / timerGPU.GetCounter());
+	printf("Number of operations = %f; GFlops = %f\n", (float)N*(float)N_ITERATIONS, (1.e-6)*((float)N*(float)N_ITERATIONS) / timerGPU.GetCounter());
 	gpuErrchk(cudaMemcpy(h_a_result_device, d_a, N*sizeof(float), cudaMemcpyDeviceToHost));
 	for (int i = 0; i<N; i++) if (h_a_result_device[i] != h_a_result_host[i]) { printf("Error at i=%i! Host = %f; Device = %f\n", i, h_a_result_host[i], h_a_result_device[i]); return 1; }
 
@@ -157,7 +159,7 @@ int main() {
 	gpuErrchk(cudaDeviceSynchronize());
 #endif
 	// --- Remember: timing is in ms
-	printf("GFlops = %f\n", (1.e-6)*((float)N*(float)N_ITERATIONS) / timerGPU.GetCounter());
+	printf("Number of operations = %f; GFlops = %f\n", (float)N*(float)N_ITERATIONS, (1.e-6)*((float)N*(float)N_ITERATIONS) / timerGPU.GetCounter());
 	gpuErrchk(cudaMemcpy(h_a_result_device, d_a, N*sizeof(float), cudaMemcpyDeviceToHost));
 	for (int i = 0; i<N; i++) if (h_a_result_device[i] != h_a_result_host[i]) { printf("Error at i=%i! Host = %f; Device = %f\n", i, h_a_result_host[i], h_a_result_device[i]); return 1; }
 
@@ -172,10 +174,12 @@ int main() {
 	gpuErrchk(cudaDeviceSynchronize());
 #endif
 	// --- Remember: timing is in ms
-	printf("GFlops = %f\n", (1.e-6)*(float)((float)N*(float)N_ITERATIONS) / timerGPU.GetCounter());
+	printf("Number of operations = %f; GFlops = %f\n", (float)N*(float)N_ITERATIONS, (1.e-6)*((float)N*(float)N_ITERATIONS) / timerGPU.GetCounter());
 	gpuErrchk(cudaMemcpy(h_a_result_device, d_a, N*sizeof(float), cudaMemcpyDeviceToHost));
 	for (int i = 0; i<N; i++) if (h_a_result_device[i] != h_a_result_host[i]) { printf("Error at i=%i! Host = %f; Device = %f\n", i, h_a_result_host[i], h_a_result_device[i]); return 1; }
 
+	cudaDeviceReset();
+	
 	return 0;
 
 }
