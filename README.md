@@ -2,9 +2,9 @@ Please, have a look at our wiki page https://github.com/OrangeOwlSolutions/Gener
 
 # CUDA codes
 
-- Folder ```simpleExamples```: codes for course [Introduction to GPU computing with CUDA](https://www.udemy.com/course/1442100/manage/goals/).
-- Folder ```coalescence```: codes for course [Introduction to GPU computing with CUDA](https://www.udemy.com/course/1442100/manage/goals/).
-- Folder ```shared memory```: codes for course [Introduction to GPU computing with CUDA](https://www.udemy.com/course/1442100/manage/goals/).
+- Folder ```simpleExamples```: codes for course [Introduction to GPU computing with CUDA](https://www.udemy.com/introduction-to-gpu-computing-with-cuda/).
+- Folder ```coalescence```: codes for course [Introduction to GPU computing with CUDA](https://www.udemy.com/introduction-to-gpu-computing-with-cuda/).
+- Folder ```shared memory```: codes for course [Introduction to GPU computing with CUDA](https://www.udemy.com/introduction-to-gpu-computing-with-cuda/).
 
 - ```Reductions.cu```: different kinds of reductions, including reduction without```__syncthreads```, reduction with no deadlock, atomic warp reduction and threadfence reduction, see [???](???);
 - ```Multiple1DMovingAveragesShared.cu```: performing several 1d moving averages in parallel, see [Performing several 1D moving averages in parallel using CUDA](http://www.orangeowlsolutions.com/archives/1161);
